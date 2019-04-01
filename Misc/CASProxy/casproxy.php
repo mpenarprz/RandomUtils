@@ -5,7 +5,7 @@
 	<body>
 		<?php
 			$key = @TO_REPLACE;
-			$validDate = '2018-06-14 00:00:00';
+			$validDate = '2019-06-14 00:00:00';
 			$now = date("Y-m-d H:i:s");
 			if($_GET['key'] == $key && strcasecmp($now, $validDate) < 0){	
 				$service = urlencode("http://www.mpenar.kia.prz.edu.pl/casproxy.php?redirect=". $_GET['redirect'] ."&key=" . $key);
