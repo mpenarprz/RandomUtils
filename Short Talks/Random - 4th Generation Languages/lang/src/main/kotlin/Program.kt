@@ -4,13 +4,25 @@ import prz.lang.SimpleLexer
 import prz.lang.SimpleParser
 
 private fun eval(tree: SimpleParser.ExpressionContext) : Double{
-    val value = tree.atom()?.text!!.toDouble()
-    return when(tree.OP()?.text){
-        "+" -> eval(tree.expression()) + value
-        "-" -> eval(tree.expression()) - value
-        "*" -> eval(tree.expression()) * value
-        "/" -> eval(tree.expression()) / value
-        else -> value
+    val value = tree.atom()?.text?.toDouble()
+    when{
+        tree.OP_1() != null -> {
+            return when(tree.OP_1()?.text){
+                "*" -> eval(tree.expression(0)) * eval(tree.expression(1))
+                "/" -> eval(tree.expression(0)) / eval(tree.expression(1))
+                else -> value ?: eval(tree.expression(0))
+            }
+        }
+        tree.OP_2() != null -> {
+            return when(tree.OP_2()?.text){
+                "+" -> eval(tree.expression(0)) + eval(tree.expression(1))
+                "-" -> eval(tree.expression(0)) - eval(tree.expression(1))
+                else -> value ?: eval(tree.expression(0))
+            }
+        }
+        else ->{
+            return value ?: eval(tree.expression(0))
+        }
     }
 }
 
@@ -23,9 +35,8 @@ fun eval(text: String): Number = text.let {
 }
 
 fun main(){
-    println(1)
-    println(eval("1"))
-    println(eval("99"))
-    println(eval("99 + 1"))
-    println(eval("9/3 * 10"))
+    println(eval("5"))
+    println(eval("999"))
+    println(eval("1 + 6 * 10"))
+    println(eval("(1 + 6) * 10"))
 }
